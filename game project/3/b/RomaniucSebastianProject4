@@ -1,0 +1,395 @@
+
+
+
+var gameChar_x;
+var gameChar_y;
+var floorPos_y;
+var trees_x;
+var treePos_y;
+var canyon;
+var collectable;
+
+var isLeft;
+var isRight;
+var isPlummeting;
+var isFalling ;
+var isJumping;
+
+
+
+function setup()
+{
+	createCanvas(1024, 576);
+	floorPos_y = height * 3/4;
+	gameChar_x = width/2;
+	gameChar_y = floorPos_y;
+    treePos_x = width/2;
+	treePos_y = height/2;
+    
+         // Canyon initialization
+    canyon = {x:240,width:60 };
+
+    // Collectable initialization
+    collectable = { x:200,y:floorPos_y -50, size: 30,isFound:false};
+
+    // Mountain1 initialization
+    mountain1 = {
+        x1: 150,
+        y1: 256,
+        x2: 20,
+        y2: 432,
+        x3: 250,
+        y3: 432
+    };
+    // Mountain2 initialization triangle(700,256,550,432,800,432);
+    mountain2 = {
+        x1: 250,
+        y1: 256,
+        x2: 80,
+        y2: 432,
+        x3: 350,
+        y3: 432
+    };
+
+    // Cloud initialization
+    cloud = {x: 300,y: 100,size: 80};
+    
+}
+isLeft=false;
+isRight=false;
+isFalling=false;
+isJumping=false;
+isPlummeting=false;
+
+trees_x =[300,400,800,1000];
+treePos_y=floorPos_y;
+
+mountains_x=[200,400,600,900];
+
+function draw()
+{
+
+	///////////DRAWING CODE//////////
+
+	background(100,155,255); //fill the sky blue
+
+
+	noStroke();
+	fill(0,155,0);
+	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+
+	for(var i=0;i<trees_x.length;i++)
+    { console.log("tree" + i);
+ //tree1
+      fill(120,100,40);
+    rect(trees_x[i],treePos_y,30,150);
+      fill(0,155,0);
+    triangle(trees_x[i] -70,treePos_y,trees_x[i]+15,treePos_y-200,trees_x[i] +100,treePos_y);
+// tree2    
+      fill(120,100,40);
+    rect(trees_x[i]+200,treePos_y,30,150);
+       fill(0,155,0);
+    triangle(trees_x[i] +130,treePos_y,trees_x[i]+215,treePos_y-200,trees_x[i] +300,treePos_y);
+                                     }
+  // Canyon
+    fill(0);
+    rect(canyon.x, floorPos_y, canyon.width, height - floorPos_y);
+    
+    //mountain
+    for(var i=0;i<trees_x.length;i++)
+     fill(128, 128, 128);
+    triangle(mountain1.x1,mountain1.y1,mountain1.x2,mountain1.y2,mountain1.x3,mountain1.y3);
+    triangle(mountain2.x1,mountain2.y1,mountain2.x2,mountain2.y2,mountain2.x3,mountain2.y3);
+    
+    // Cloud
+       fill(255);
+    ellipse(cloud.x, cloud.y, cloud.size);
+    ellipse(cloud.x+45, cloud.y, cloud.size-15);
+    ellipse(cloud.x-40, cloud.y, cloud.size-29);
+    
+    //collectable    it's a gold coin
+    
+    if(dist(gameChar_x,gameChar_y -50,collectable.x,collectable.y)<30){
+        collectable.isFound == true;
+//        fill(250,150,150,300);
+//        ellipse(collectable.x,collectable.y,200,200)
+    } 
+    if(collectable.isFound == false){
+    fill(255, 223, 0);
+    ellipse(collectable.x, collectable.y, collectable.size);
+    }
+
+	//the game character
+    stroke(0);
+	if(isLeft && isFalling)
+	{
+		// add your jumping-left code
+          //head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+    //eyes
+    ellipse(gameChar_x -4,gameChar_y-67, 5,5);
+    //mouth
+    fill(0);
+    rect(gameChar_x-10,gameChar_y-59, 10,3,10);
+    //body
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    //LEGS
+    fill(0);
+    //right
+    rect(gameChar_x +5,gameChar_y - 21, 5,23,20);
+    //left
+     rect(gameChar_x- 10,gameChar_y - 21, 5,23,20);
+
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-25,gameChar_y-45,15,5,10);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,15,5,10);
+
+
+	}
+	else if(isRight && isFalling)
+	{
+		// add your jumping-right code
+          //head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+    //eyes
+    ellipse(gameChar_x +4,gameChar_y-67, 5,5);
+    //mouth
+    fill(0);
+    rect(gameChar_x,gameChar_y-59, 10,3,20);
+    //body
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    //LEGS
+    fill(0);
+    //right
+    rect(gameChar_x +5,gameChar_y - 21, 5,23,20);
+    //left
+     rect(gameChar_x- 10,gameChar_y - 21, 5,23,20);
+
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-25,gameChar_y-45,15,5,10);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,15,5,10);
+
+	}
+    
+	else if(isLeft)
+	{
+		// add your walking left code
+         //head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+    //eyes
+    ellipse(gameChar_x -4,gameChar_y-67, 5,5);
+    //mouth
+    fill(0);
+    rect(gameChar_x-10,gameChar_y-59, 10,3,10);
+ 
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    
+    //LEGS
+    fill(0);
+    //right
+     rect(gameChar_x + 5, gameChar_y - 21, 5, 23,10);
+    //left
+     rect(gameChar_x - 10,gameChar_y - 21, 5, 23,10);
+    
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-15,gameChar_y-45,5,25,5);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,5,25,5);
+    
+
+	}
+    
+	else if(isRight)
+	{
+		// add your walking right code
+        
+//head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+     //eyes
+    ellipse(gameChar_x +4,gameChar_y-67, 5,5);
+    //mouth
+    fill(0);
+    rect(gameChar_x,gameChar_y-59, 10,3,20);
+    //body
+ 
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    
+    //LEGS
+    fill(0);
+    //right
+     rect(gameChar_x + 5, gameChar_y - 21, 5, 23,10);
+    //left
+     rect(gameChar_x - 10,gameChar_y - 21, 5, 23,10);
+    
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-15,gameChar_y-45,5,25,5);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,5,25,5);
+    
+	}
+    
+	else if(isFalling || isPlummeting || isJumping)
+	{
+		// add your jumping facing forwards code
+         //head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+    //eyes
+    ellipse(gameChar_x -4,gameChar_y-67, 5,5);
+    ellipse(gameChar_x +4,gameChar_y-67, 5,5);
+    
+    //mouth
+    fill(0);
+    rect(gameChar_x-7,gameChar_y-59, 14,3,10);
+    //body
+ 
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    //body
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    //LEGS
+    fill(0);
+    //right
+    rect(gameChar_x +5,gameChar_y - 21, 5,23,20);
+    //left
+     rect(gameChar_x- 10,gameChar_y - 21, 5,23,20);
+
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-25,gameChar_y-45,15,5,10);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,15,5,10);
+
+	}
+    
+	else
+	{
+		// add your standing front facing code
+        
+    //head
+    fill(0,256,0);
+    ellipse(gameChar_x,gameChar_y - 63,25,25);
+    fill(0);
+    //eyes
+    ellipse(gameChar_x -4,gameChar_y-67, 5,5);
+    ellipse(gameChar_x +4,gameChar_y-67, 5,5);
+    
+    //mouth
+    fill(0);
+    rect(gameChar_x-7,gameChar_y-59, 14,3,10);
+    //body
+ 
+    fill(0,0,256);
+    rect(gameChar_x-12,gameChar_y-49,24,30,10);
+    
+    //LEGS
+    fill(0);
+    //right
+     rect(gameChar_x + 5, gameChar_y - 21, 5, 23,10);
+    //left
+     rect(gameChar_x - 10,gameChar_y - 21, 5, 23,10);
+    
+    //Arms
+    fill(0);
+    //left
+    rect(gameChar_x-15,gameChar_y-45,5,25,5);
+    //right
+    rect(gameChar_x+10,gameChar_y-45,5,25,5);
+    
+
+	}
+
+	///////////INTERACTION CODE//////////
+	//Put conditional statements to move the game character below here
+    
+    if(isLeft == true){
+        gameChar_x -=5;
+    }
+    if(isRight == true){
+        gameChar_x +=5;
+    }
+    if(isJumping == true && !isFalling){
+        gameChar_y -=100;
+    }
+    //Gravity
+    if (gameChar_y < floorPos_y) {
+        gameChar_y += 4;
+        isFalling = true;
+    } else {
+        isFalling = false;
+    }
+    
+
+}
+
+
+function keyPressed()
+{
+	// if statements to control the animation of the character when
+	// keys are pressed.
+
+	//open up the console to see how these work
+	console.log("keyPressed: " + key);
+	console.log("keyPressed: " + keyCode);
+    
+    if(keyCode == 37) {
+        isLeft = true;
+    }
+    
+    if(keyCode == 39) {
+        isRight = true;
+    }
+        
+    if(keyCode == 38 ) {
+        isJumping =true ;
+    }
+    
+    
+}
+
+function keyReleased()
+{
+	// if statements to control the animation of the character when
+	// keys are released.
+
+	console.log("keyReleased: " + key);
+	console.log("keyReleased: " + keyCode);
+    
+     
+    if(keyCode == 37) {
+        isLeft = false;
+    }
+    
+    if(keyCode == 39) {
+        isRight = false;
+    }
+    if(keyCode == 38) {
+        isJumping = false;
+    }
+    
+}
